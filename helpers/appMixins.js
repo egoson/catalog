@@ -1,5 +1,8 @@
 import {mutationTypes} from '@/store/index'
 
+/**
+ * Маска для поля с типом "tel". Вывод в формате +7 (ХХХ) ХХХ-ХХ-ХХ
+ */
 export const maskPhone = {
   directives: {
     phone: {
