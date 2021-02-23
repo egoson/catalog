@@ -92,7 +92,7 @@ export default {
   .photo {
     grid-area: photo;
     width: 40%;
-    height: auto;
+    height: 100%;
     flex-shrink: 0;
   }
 

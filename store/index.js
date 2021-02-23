@@ -106,8 +106,10 @@ const createStore = () => {
       },
       [actionTypes.selectFromLocalStorage](vuexContext, context) {
         let productList = getItem(context)
-        for (let product of productList) {
-          vuexContext.commit(mutationTypes.addProduct, product)
+        if (productList) {
+          for (let product of productList) {
+            vuexContext.commit(mutationTypes.addProduct, product)
+          }
         }
       },
       [actionTypes.addProduct](vuexContext, product) {
