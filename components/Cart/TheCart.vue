@@ -151,7 +151,6 @@ export default {
   transition: 0.35s;
   will-change: auto;
   max-width: 460px;
-  z-index: 2;
 }
 
 .cartBtn {
@@ -159,23 +158,22 @@ export default {
 
   &[disabled] {
     color: transparent;
-    background-color: var(--grey-light);
-    cursor: initial;
 
     &:after {
       display: block;
       color: var(--white);
-      content: '';
+      content: 'Отправляю...';
       width: 80px;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      @include animation('loading 2s infinite');
+      @include animation('loading 1.5s infinite');
     }
 
     &:hover {
-      background-color: var(--grey-light);
+      background-color: var(--black);
+      cursor: initial;
     }
   }
 }
@@ -204,6 +202,7 @@ export default {
 .transitionBackground {
   transition: 0.25s;
   will-change: auto;
+  z-index: 2;
 }
 
 .backgroundCart {

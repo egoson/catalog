@@ -1,100 +1,94 @@
 @mixin title-text($font-size: 32px, $line-height: 41px) {
-    font-size: $font-size;
-    font-style: normal;
-    font-weight: 700;
-    line-height: $line-height;
-    color: var(--title);
+  font-size: $font-size;
+  font-style: normal;
+  font-weight: 700;
+  line-height: $line-height;
+  color: var(--title);
 }
 
 @mixin app-link($font-size: 16px) {
-    font-size: $font-size;
-    font-weight: 400;
-    color: var(--grey-light);
+  font-size: $font-size;
+  font-weight: 400;
+  color: var(--grey-light);
 
-    &:hover {
-        color: var(--grey);
-    }
+  &:hover {
+    color: var(--grey);
+  }
 }
 
 @mixin absolute-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 @mixin app-block($padding: 18px 16px) {
-    padding: $padding;
-    background-color: var(--white);
-    box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.05);
-    border-radius: 8px 0px 0px 8px;
+  padding: $padding;
+  background-color: var(--white);
+  box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.05);
+  border-radius: 8px 0px 0px 8px;
 }
 
 @mixin app-input {
-    background-color: var(--grey-extra-light);
-    border-radius: 8px;
+  background-color: var(--grey-extra-light);
+  border-radius: 8px;
 }
 
 @mixin app-text($color-app-text: var(--grey), $font-size-text: 18px) {
-    font-size: $font-size-text;
-    line-height: 23px;
-    color: $color-app-text;
+  font-size: $font-size-text;
+  line-height: 23px;
+  color: $color-app-text;
 }
 
 @mixin keyframes($animation-name) {
-    @keyframes #{$animation-name} {
-        @content;
-    }
+  @keyframes #{$animation-name} {
+    @content;
+  }
 }
-  
+
 @mixin animation($str) {
-    animation: #{$str};
+  animation: #{$str};
 }
 
 @include keyframes(loading) {
-    0% {
-        content: 'Отправляю'
-    }
-    25% {
-        content: 'Отправляю.'
-    }
-    50% {
-        content: 'Отправляю..'
-    }
-    75% {
-        content: 'Отправляю...'
-    }
-    100% {
-        content: 'Отправляю'
-    }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @include keyframes(shake) {
-    0% {
-        transform: none;
-      }
-    
-      15% {
-        transform: translate3d(-20%, 0, 0) rotate3d(0, 0, 1, -5deg);
-      }
-    
-      30% {
-        transform: translate3d(15%, 0, 0) rotate3d(0, 0, 1, 3deg);
-      }
-    
-      45% {
-        transform: translate3d(-10%, 0, 0) rotate3d(0, 0, 1, -3deg);
-      }
-    
-      60% {
-        transform: translate3d(5%, 0, 0) rotate3d(0, 0, 1, 2deg);
-      }
-    
-      75% {
-        transform: translate3d(0%, 0, 0) rotate3d(0, 0, 1, -1deg);
-      }
-    
-      100% {
-        transform: none;
-      }
+  0% {
+    transform: none;
+  }
+
+  15% {
+    transform: translate3d(-20%, 0, 0) rotate3d(0, 0, 1, -5deg);
+  }
+
+  30% {
+    transform: translate3d(15%, 0, 0) rotate3d(0, 0, 1, 3deg);
+  }
+
+  45% {
+    transform: translate3d(-10%, 0, 0) rotate3d(0, 0, 1, -3deg);
+  }
+
+  60% {
+    transform: translate3d(5%, 0, 0) rotate3d(0, 0, 1, 2deg);
+  }
+
+  75% {
+    transform: translate3d(0%, 0, 0) rotate3d(0, 0, 1, -1deg);
+  }
+
+  100% {
+    transform: none;
+  }
 }
