@@ -1,73 +1,61 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">
-        nuxt-app
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+  <div style="overflow: hidden">
+    <div :class="$style.catalogHeader">
+      <p :class="$style.title">Каталог</p>
+      <ProductSort />
     </div>
+    <section :class="$style.listWrap">
+      <CatalogList :catalogItems="catalogItems" />
+      <div :class="$style.productList">
+        <nuxt-child />
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-export default {}
+import CatalogList from '@/components/Catalog/CatalogList'
+import ProductSort from '@/components/Product/ProductSort'
+import {actionTypes} from '@/store/index'
+export default {
+  name: 'AppCatalog',
+  components: {
+    CatalogList,
+    ProductSort,
+  },
+  computed: {
+    catalogItems() {
+      return this.$store.getters.catalogItems
+    },
+  },
+  mounted() {
+    this.$store.dispatch(actionTypes.selectFromLocalStorage, 'productList')
+  },
+}
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
+<style module lang="scss">
 .title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
+  @include title-text;
+}
+
+.catalogHeader {
+  display: flex;
+  place-items: center;
+  justify-content: space-between;
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.productList {
+  width: 100%;
+}
+
+.listWrap {
   display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+  @media (min-width: 781px) {
+    display: flex;
+  }
 }
 </style>

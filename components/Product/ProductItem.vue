@@ -1,0 +1,155 @@
+<template>
+  <div
+    :class="[
+      {[$style.product]: !isCart, [$style.removingItem]: hideAnimation},
+      $style.productSmall,
+    ]"
+  >
+    <img
+      :class="$style.photo"
+      :src="'https://frontend-test.idaproject.com' + product.photo"
+      :alt="product.name"
+    />
+    <div :class="$style.productInner">
+      <div :class="$style.titleBlock">
+        <h1 :class="$style.title">{{ product.name }}</h1>
+        <span :class="$style.price">{{ product.price }} ₽</span>
+      </div>
+      <ProductRaiting :class="$style.rating">{{
+        product.rating
+      }}</ProductRaiting>
+    </div>
+    <ProductBtn
+      :isCart="isCart"
+      :class="$style.btn"
+      @click="
+        isCart
+          ? removeProductItem(productIndex, product)
+          : addProductItem(product)
+      "
+    />
+  </div>
+</template>
+
+<script>
+import ProductBtn from '@/components/Product/ProductBtn'
+import ProductRaiting from '@/components/Product/ProductRaiting'
+import {actionTypes} from '@/store/index'
+
+export default {
+  name: 'ProductItem',
+  components: {
+    ProductBtn,
+    ProductRaiting,
+  },
+  data() {
+    return {
+      hideAnimation: false,
+    }
+  },
+  props: {
+    product: {
+      type: Object,
+      required: true,
+    },
+    isCart: {
+      type: Boolean,
+      default: false,
+    },
+    productIndex: {
+      type: Number,
+      required: true,
+    },
+  },
+  computed: {
+    productList() {
+      return this.$store.getters.cart.products
+    },
+  },
+  methods: {
+    addProductItem(product) {
+      this.$store.dispatch(actionTypes.addProduct, product)
+    },
+    removeProductItem(productIndex) {
+      this.hideAnimation = true
+      setTimeout(() => {
+        this.$store.dispatch(actionTypes.removeProduct, productIndex)
+        this.hideAnimation = false
+      }, 350)
+    },
+  },
+}
+</script>
+
+<style module lang="scss">
+.productSmall {
+  @include app-block(12px 22px 12px);
+  display: flex;
+  margin-bottom: 12px;
+  position: relative;
+  right: 0;
+
+  .photo {
+    grid-area: photo;
+    width: 40%;
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  .title {
+    @include app-text(var(--grey), 14px);
+    font-weight: normal;
+    line-height: 18px;
+  }
+
+  .btn {
+    grid-area: btn;
+    margin: auto 0 auto auto;
+  }
+
+  .price {
+    grid-area: price;
+    @include app-text(var(--black), 14px);
+    font-weight: bold;
+    line-height: 18px;
+  }
+
+  .rating {
+    grid-area: rating;
+    margin-top: auto;
+  }
+
+  .productInner {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.removingItem {
+  transition: 0.35s;
+  position: relative;
+  right: -200%;
+}
+
+@media (min-width: 781px) {
+  .product {
+    display: block;
+
+    .photo {
+      width: 100%;
+    }
+
+    .btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+    }
+
+    .rating {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+    }
+  }
+}
+</style>

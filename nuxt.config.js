@@ -17,7 +17,16 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '~/assets/styles/reset.css',
+    '~/assets/styles/global.css',
+    '~/assets/styles/variables.css',
+    '~/assets/styles/main.css',
   ],
+
+  loading: {
+    color: 'green',
+    height: '1px'
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -28,7 +37,15 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/style-resources',
   ],
+
+  styleResources: {
+    // your settings here
+    scss: [
+      './assets/styles/mixins.scss',
+    ],
+   },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -37,9 +54,17 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL:  process.env.BASE_URL || 'https://frontend-test.idaproject.com/api',
+    https: true
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+
+  transition: {
+    name: 'fade',
+    mode: 'out-in'
+  },
 }
