@@ -2,9 +2,10 @@
 
 ## Build Setup
 
+```bash
+
 git clone https://github.com/egoson/nuxt-app.git
 
-```bash
 # install dependencies
 $ npm install
 
