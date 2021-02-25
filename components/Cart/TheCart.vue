@@ -151,6 +151,7 @@ export default {
   transition: 0.35s;
   will-change: auto;
   max-width: 460px;
+  z-index: 2;
 }
 
 .cartBtn {
