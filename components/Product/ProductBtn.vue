@@ -54,9 +54,6 @@
 export default {
   name: 'ProductBtn',
   inject: ['isCart'],
-  created() {
-    console.log(`Injected property: ${this.isCart}`) // > Injected property: 5
-  },
 }
 </script>
 
