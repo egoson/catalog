@@ -5,7 +5,7 @@
       v-for="(productItem, index) in productItems"
       :key="index"
     >
-      <Product :productIndex="index" :isCart="isCart" :product="productItem" />
+      <Product :productIndex="index" :product="productItem" />
     </li>
   </ul>
 </template>
@@ -25,6 +25,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  provide() {
+    return {
+      isCart: this.isCart,
+    }
   },
 }
 </script>

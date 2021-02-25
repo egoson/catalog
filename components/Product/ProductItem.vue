@@ -20,7 +20,6 @@
       }}</ProductRaiting>
     </div>
     <ProductBtn
-      :isCart="isCart"
       :class="$style.btn"
       @click="
         isCart
@@ -42,6 +41,7 @@ export default {
     ProductBtn,
     ProductRaiting,
   },
+  inject: ['isCart'],
   data() {
     return {
       hideAnimation: false,
@@ -51,10 +51,6 @@ export default {
     product: {
       type: Object,
       required: true,
-    },
-    isCart: {
-      type: Boolean,
-      default: false,
     },
     productIndex: {
       type: Number,

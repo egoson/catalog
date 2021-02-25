@@ -53,11 +53,9 @@
 <script>
 export default {
   name: 'ProductBtn',
-  props: {
-    isCart: {
-      type: Boolean,
-      default: false,
-    },
+  inject: ['isCart'],
+  created() {
+    console.log(`Injected property: ${this.isCart}`) // > Injected property: 5
   },
 }
 </script>
