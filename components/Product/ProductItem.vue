@@ -33,7 +33,8 @@
 <script>
 import ProductBtn from '@/components/Product/ProductBtn'
 import ProductRaiting from '@/components/Product/ProductRaiting'
-import {actionTypes} from '@/store/index'
+import {actionTypes} from '@/store/cart'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: 'ProductItem',
@@ -58,18 +59,20 @@ export default {
     },
   },
   computed: {
-    productList() {
-      return this.$store.getters.cart.products
-    },
+    ...mapGetters(['productList']),
   },
   methods: {
+    ...mapActions({
+      removeProduct: 'cart/' + actionTypes.removeProduct,
+      addProduct: 'cart/' + actionTypes.addProduct,
+    }),
     addProductItem(product) {
-      this.$store.dispatch(actionTypes.addProduct, product)
+      this.addProduct(product)
     },
     removeProductItem(productIndex) {
       this.hideAnimation = true
       setTimeout(() => {
-        this.$store.dispatch(actionTypes.removeProduct, productIndex)
+        this.removeProduct(productIndex)
         this.hideAnimation = false
       }, 350)
     },
@@ -86,7 +89,6 @@ export default {
   right: 0;
 
   .photo {
-    grid-area: photo;
     width: 40%;
     height: 100%;
     flex-shrink: 0;
@@ -99,19 +101,16 @@ export default {
   }
 
   .btn {
-    grid-area: btn;
     margin: auto 0 auto auto;
   }
 
   .price {
-    grid-area: price;
     @include app-text(var(--black), 14px);
     font-weight: bold;
     line-height: 18px;
   }
 
   .rating {
-    grid-area: rating;
     margin-top: auto;
   }
 

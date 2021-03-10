@@ -4,7 +4,7 @@
     :class="$style.appLink"
     :to="'/' + catalogItem.id"
   >
-    {{ catalogItem.name }}
+    <slot />
   </nuxt-link>
 </template>
 

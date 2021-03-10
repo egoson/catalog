@@ -1,82 +1,91 @@
 <template>
-  <form
-    @click="closeCart($event)"
-    @submit="sendOrder($event)"
-    :class="[$style.transitionBackground, {[$style.backgroundCart]: isActive}]"
+  <div
+    :class="[{[$style.backgroundCart]: isActive}, $style.transitionBackground]"
+    @click.self="toggleCart"
   >
-    <div
-      :class="[
-        $style.block,
-        $style.cart,
-        {[$style.hiddenCart]: !isActive, [$style.scrollActive]: isActive},
-      ]"
-    >
-      <TheCartHeader />
-      <TheCartBody
-        :selectedCount="selectedCount"
-        :successOrder="successOrder"
-      />
-      <ProductList
-        v-if="selectedProducts.length > 0"
-        :isCart="true"
-        :class="$style.cartProductList"
-        :productItems="selectedProducts"
-      />
-      <template v-if="!successOrder">
-        <template v-if="selectedCount">
-          <p :class="$style.cartText">Оформить заказ</p>
-          <AppInput
-            required
-            :class="$style.cartInput"
-            type="text"
-            autocomplete="name"
-            placeholder="Ваше имя"
-            :value="name"
-            @change.native="name = $event.target.value"
-          />
-          <AppInput
-            required
-            :class="$style.cartInput"
-            v-phone
-            type="tel"
-            autocomplete="tel"
-            placeholder="Телефон"
-            :value="phone"
-            @change.native="phone = $event.target.value"
-          />
-          <AppInput
-            required
-            :class="$style.cartInput"
-            type="text"
-            placeholder="Адрес"
-            :value="adress"
-            @change.native="adress = $event.target.value"
-          />
+    <form @submit.prevent="sendOrder($event)">
+      <div
+        :class="[
+          $style.block,
+          $style.cart,
+          {[$style.hiddenCart]: !isActive, [$style.scrollActive]: isActive},
+        ]"
+      >
+        <TheCartHeader />
+        <TheCartBody
+          :selectedCount="selectedCount"
+          :successOrder="successOrder"
+        />
+        <ProductList
+          v-if="selectedProducts.length > 0"
+          :isCart="true"
+          :class="$style.cartProductList"
+          :productItems="selectedProducts"
+        />
+        <template v-if="!successOrder">
+          <div :class="$style.inputsWrap">
+            <template v-if="selectedCount">
+              <div :class="$style.cartTextWrap">
+                <p :class="[$style.alertText]" v-if="errorMessage">
+                  {{ errorMessage }}
+                </p>
+                <p v-else>Оформить заказ</p>
+              </div>
+              <AppInput
+                required
+                :class="$style.cartInput"
+                type="text"
+                autocomplete="name"
+                placeholder="Ваше имя"
+                :value="name"
+                @change.native="name = $event.target.value"
+              />
+              <AppInput
+                required
+                :class="$style.cartInput"
+                v-phone
+                type="tel"
+                autocomplete="tel"
+                placeholder="Телефон"
+                :value="phone"
+                @change.native="phone = $event.target.value"
+              />
+              <AppInput
+                required
+                :class="$style.cartInput"
+                type="text"
+                placeholder="Адрес"
+                :value="adress"
+                @change.native="adress = $event.target.value"
+              />
+            </template>
+            <AppButton
+              :class="$style.cartBtn"
+              type="button"
+              v-if="!selectedCount"
+              @click="toggleCart"
+              >Перейти к выбору</AppButton
+            >
+            <AppButton
+              v-else
+              :class="[$style.cartBtn, {[$style.pending]: loading}]"
+              >Отправить</AppButton
+            >
+          </div>
         </template>
-        <AppButton
-          :class="$style.cartBtn"
-          type="button"
-          v-if="!selectedCount"
-          @click="toggleCart"
-          >Перейти к выбору</AppButton
-        >
-
-        <AppButton v-else :disabled="loading" :class="$style.cartBtn"
-          >Отправить</AppButton
-        >
-      </template>
-    </div>
-  </form>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
 import AppButton from '@/components/UI/AppButton'
-import {mapState} from 'vuex'
+import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
 import AppInput from '@/components/UI/AppInput'
 import TheCartBody from '@/components/Cart/TheCartBody'
 import TheCartHeader from '@/components/Cart/TheCartHeader'
 import {maskPhone, toggleCart} from '@/helpers/appMixins'
-import {mutationTypes, actionTypes} from '@/store/index'
+import {mutationTypes, actionTypes} from '@/store/cart'
 
 export default {
   name: 'TheCart',
@@ -88,37 +97,37 @@ export default {
     TheCartHeader,
   },
   methods: {
-    sendOrder(event) {
-      event.preventDefault()
-      this.$store.dispatch(actionTypes.sendOrder)
-    },
-    closeCart(event) {
-      event.target.tagName !== 'FORM' ||
-        this.$store.commit(mutationTypes.toggleCart)
+    ...mapMutations({
+      setCustomerName: 'cart/' + mutationTypes.setCustomerName,
+      setCustomerPhone: 'cart/' + mutationTypes.setCustomerPhone,
+      setCustomerAdress: 'cart/' + mutationTypes.setCustomerAdress,
+      setErrorMessage: 'cart/' + mutationTypes.setErrorMessage,
+    }),
+    ...mapActions({
+      sendOrderAction: 'cart/' + actionTypes.sendOrder,
+    }),
+    sendOrder() {
+      if (this.phone.length === 18) {
+        this.sendOrderAction()
+      } else {
+        this.setErrorMessage('Номер введен неверно')
+      }
     },
   },
   computed: {
-    ...mapState({
-      isEmpty: (state) => state.cart.isEmpty,
+    ...mapState('cart', {
       successOrder: (state) => state.successOrder,
       customer: (state) => state.customer,
       loading: (state) => state.loading,
+      errorMessage: (state) => state.errorMessage,
     }),
-    selectedProducts() {
-      return this.$store.getters.cart.products
-    },
-    selectedCount() {
-      return this.$store.getters.selectedCount
-    },
-    isActive() {
-      return this.$store.getters.cart.isActive
-    },
+    ...mapGetters('cart', ['selectedProducts', 'selectedCount', 'isActive']),
     name: {
       get: function () {
         return this.customer.name
       },
       set: function (newValue) {
-        this.$store.commit(mutationTypes.setCustomerName, newValue)
+        this.setCustomerName(newValue)
       },
     },
     phone: {
@@ -126,7 +135,7 @@ export default {
         return this.customer.phone
       },
       set: function (newValue) {
-        this.$store.commit(mutationTypes.setCustomerPhone, newValue)
+        this.setCustomerPhone(newValue)
       },
     },
     adress: {
@@ -134,7 +143,7 @@ export default {
         return this.customer.adress
       },
       set: function (newValue) {
-        this.$store.commit(mutationTypes.setCustomerAdress, newValue)
+        this.setCustomerAdress(newValue)
       },
     },
   },
@@ -154,28 +163,55 @@ export default {
   z-index: 2;
 }
 
+.inputsWrap {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding-left: 48px;
+  padding-right: 48px;
+  padding-bottom: 25px;
+  padding-top: 20px;
+  max-width: 460px;
+  background-image: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 93%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
 .cartBtn {
   margin-top: 24px;
 
   &[disabled] {
-    color: transparent;
-
-    &:after {
-      display: block;
-      color: var(--white);
-      content: 'Отправляю...';
-      width: 80px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      @include animation('loading 1.5s infinite');
-    }
+    opacity: 0.7;
 
     &:hover {
       background-color: var(--black);
       cursor: initial;
     }
+  }
+}
+
+.pending {
+  color: transparent;
+
+  &:after {
+    display: block;
+    color: var(--white);
+    content: 'Отправляю...';
+    width: 80px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    @include animation('pending 1.5s infinite');
+  }
+
+  &:hover {
+    background-color: var(--black);
+    cursor: initial;
   }
 }
 
@@ -198,6 +234,7 @@ export default {
 
 .cartProductList {
   margin-bottom: 32px;
+  padding-bottom: 264px;
 }
 
 .transitionBackground {
@@ -227,5 +264,13 @@ export default {
 .cartText {
   @include app-text(var(--dark-black));
   margin-bottom: 16px;
+}
+
+.alertText {
+  @include alert-text;
+}
+
+.cartTextWrap {
+  margin-bottom: 10px;
 }
 </style>

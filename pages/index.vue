@@ -2,7 +2,6 @@
   <div style="overflow: hidden">
     <div :class="$style.catalogHeader">
       <p :class="$style.title">Каталог</p>
-      <ProductSort />
     </div>
     <section :class="$style.listWrap">
       <CatalogList :catalogItems="catalogItems" />
@@ -15,21 +14,23 @@
 
 <script>
 import CatalogList from '@/components/Catalog/CatalogList'
-import ProductSort from '@/components/Product/ProductSort'
-import {actionTypes} from '@/store/index'
+import {actionTypes} from '@/store/cart'
+import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'AppCatalog',
   components: {
     CatalogList,
-    ProductSort,
   },
   computed: {
-    catalogItems() {
-      return this.$store.getters.catalogItems
-    },
+    ...mapGetters(['catalogItems']),
+  },
+  methods: {
+    ...mapActions({
+      selectFromLocalStorage: 'cart/' + actionTypes.selectFromLocalStorage,
+    }),
   },
   mounted() {
-    this.$store.dispatch(actionTypes.selectFromLocalStorage, 'productList')
+    this.selectFromLocalStorage()
   },
 }
 </script>
