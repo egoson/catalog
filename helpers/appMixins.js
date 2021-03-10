@@ -1,7 +1,8 @@
-import {mutationTypes} from '@/store/index'
+import {mutationTypes} from '@/store/cart'
+import {mapMutations} from 'vuex'
 
 /**
- * Маска для поля с типом "tel". Вывод в формате +7 (ХХХ) ХХХ-ХХ-ХХ
+ * Возвращает строку в формате "+7 (ХХХ) ХХХ-ХХ-ХХ"
  */
 export const maskPhone = {
   directives: {
@@ -33,8 +34,11 @@ export const maskPhone = {
 
 export const toggleCart = {
   methods: {
+    ...mapMutations({
+      toggleCartMutation: 'cart/' + mutationTypes.toggleCart,
+    }),
     toggleCart() {
-      this.$store.commit(mutationTypes.toggleCart)
+      this.toggleCartMutation()
     },
   },
 }

@@ -1,7 +1,9 @@
 <template>
   <ul :class="$style.catalogList">
     <li v-for="catalogItem in catalogItems" :key="catalogItem.id">
-      <CatalogItem :class="$style.catalogItem" :catalogItem="catalogItem" />
+      <CatalogItem :class="$style.catalogItem" :catalogItem="catalogItem">
+        {{ catalogItem.name }}
+      </CatalogItem>
     </li>
   </ul>
 </template>

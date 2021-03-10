@@ -2,9 +2,11 @@
   <nav :class="$style.nav">
     <ul :class="$style.navList">
       <li :class="$style.navItem">
-        <nuxt-link :class="$style.logoLink" to="/">Test list</nuxt-link>
+        <nuxt-link :class="$style.logoLink" to="/">
+          <img src="@/assets/images/logoastrio.png" alt="logo" />
+        </nuxt-link>
       </li>
-      <li :class="$style.navItem" @click="toggleCart">
+      <li :class="$style.navItem" @click="toggleCart" v-show="!isActive">
         <div :class="{[$style.headerSvgWrap]: isShake}">
           <span v-if="selectedCount" :class="$style.counter">{{
             selectedCount
@@ -44,6 +46,7 @@
 
 <script>
 import {toggleCart} from '@/helpers/appMixins'
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'TheHeader',
@@ -54,9 +57,7 @@ export default {
     }
   },
   computed: {
-    selectedCount() {
-      return this.$store.getters.selectedCount
-    },
+    ...mapGetters('cart', ['selectedCount', 'isActive']),
   },
   watch: {
     selectedCount: function () {

@@ -41,6 +41,10 @@
   color: $color-app-text;
 }
 
+@mixin alert-text {
+  color: var(--alert-color);
+}
+
 @mixin keyframes($animation-name) {
   @keyframes #{$animation-name} {
     @content;
@@ -51,7 +55,7 @@
   animation: #{$str};
 }
 
-@include keyframes(loading) {
+@include keyframes(pending) {
   0% {
     opacity: 1;
   }
