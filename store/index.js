@@ -15,7 +15,7 @@ export const mutations = {
 export const actions = {
   nuxtServerInit(vuexContext, context) {
     return context.app.$axios
-      .$get('/product-category')
+      .$get('/brands.json')
       .then((catalogItems) => {
         vuexContext.commit(mutationTypes.setCatalogItems, catalogItems)
       })

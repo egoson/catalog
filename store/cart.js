@@ -123,4 +123,7 @@ export const getters = {
   selectedCount(state) {
     return state.products.length
   },
+  totalPrice(state) {
+    return state.products.reduce((sum, product) => sum + product.price, 0)
+  },
 }

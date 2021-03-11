@@ -3,16 +3,14 @@ export default {
   head: {
     title: 'nuxt-app',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'en',
     },
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      {charset: 'utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {hid: 'description', name: 'description', content: ''},
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -25,27 +23,22 @@ export default {
 
   loading: {
     color: 'green',
-    height: '1px'
+    height: '1px',
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-  ],
+  plugins: [],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    '@nuxtjs/style-resources',
-  ],
+  buildModules: ['@nuxtjs/style-resources'],
 
   styleResources: {
     // your settings here
-    scss: [
-      './assets/styles/mixins.scss',
-    ],
-   },
+    scss: ['./assets/styles/mixins.scss'],
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -55,16 +48,17 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL:  process.env.BASE_URL || 'https://frontend-test.idaproject.com/api',
-    https: true
+    baseURL:
+      process.env.BASE_URL ||
+      'https://my-nuxt-education-default-rtdb.europe-west1.firebasedatabase.app',
+    https: true,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  },
+  build: {},
 
   transition: {
     name: 'fade',
-    mode: 'out-in'
+    mode: 'out-in',
   },
 }
