@@ -59,6 +59,9 @@
                 @change.native="adress = $event.target.value"
               />
             </template>
+            <span v-if="totalPrice" :class="$style.totalPrice"
+              >К оплате: ₽{{ totalPrice }}</span
+            >
             <AppButton
               :class="$style.cartBtn"
               type="button"
@@ -121,7 +124,12 @@ export default {
       loading: (state) => state.loading,
       errorMessage: (state) => state.errorMessage,
     }),
-    ...mapGetters('cart', ['selectedProducts', 'selectedCount', 'isActive']),
+    ...mapGetters('cart', [
+      'selectedProducts',
+      'selectedCount',
+      'isActive',
+      'totalPrice',
+    ]),
     name: {
       get: function () {
         return this.customer.name
@@ -217,10 +225,6 @@ export default {
 
 .cartInput {
   margin-bottom: 16px;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
 }
 
 .scrollActive {
@@ -251,6 +255,12 @@ export default {
   height: 100%;
   background-color: var(--white-08);
   z-index: 2;
+}
+
+.totalPrice {
+  font-weight: bold;
+  display: block;
+  text-align: right;
 }
 
 .hiddenCart {
