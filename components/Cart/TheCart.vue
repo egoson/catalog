@@ -36,7 +36,6 @@
                 :class="$style.cartInput"
                 type="text"
                 placeholder="Ваше имя"
-                :value="name"
                 @change.native="name = $event.target.value"
               />
               <AppInput
@@ -45,7 +44,6 @@
                 v-phone
                 type="tel"
                 placeholder="Телефон"
-                :value="phone"
                 @input.native="phone = $event.target.value"
               />
               <AppInput
@@ -53,7 +51,6 @@
                 :class="$style.cartInput"
                 type="text"
                 placeholder="Адрес"
-                :value="adress"
                 @change.native="adress = $event.target.value"
               />
             </template>
