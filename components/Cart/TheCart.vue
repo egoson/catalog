@@ -169,9 +169,9 @@ export default {
   z-index: 2;
 
   .cartProductList {
-  margin-bottom: 32px;
-  padding-bottom: 264px;
-}
+    margin-bottom: 32px;
+    padding-bottom: 290px;
+  }
 }
 
 .inputsWrap {
