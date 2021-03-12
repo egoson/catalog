@@ -170,11 +170,14 @@ export const getters = {
   },
   totalPrice(state) {
     return state.products.reduce((sum, product, index, array) => {
-      return array.length - 1 == index
-        ? product.regular_price.currency +
+      if (product.regular_price) {
+        array.length - 1 == index
+          ? product.regular_price.currency +
             ' ' +
             (sum + product.regular_price.value).toFixed(2)
-        : sum + product.regular_price.value
+          : sum + product.regular_price.value
+      }
+      return sum
     }, 0)
   },
 }
