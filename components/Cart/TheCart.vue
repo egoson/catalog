@@ -17,7 +17,7 @@
           :successOrder="successOrder"
         />
         <ProductList
-          v-if="true"
+          v-if="selectedProducts.length > 0"
           :isCart="true"
           :class="$style.cartProductList"
           :productItems="selectedProducts"

@@ -1,5 +1,6 @@
 <template>
-  <ProductList :productItems="productItems" />
+  <ProductList v-if="productItems.length > 0" :productItems="productItems" />
+  <div v-else>Товар закончился :(</div>
 </template>
 
 <script>
