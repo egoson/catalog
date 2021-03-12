@@ -4,7 +4,7 @@
 
 ```bash
 
-git clone https://github.com/egoson/nuxt-app.git
+https://github.com/egoson/catalog.git
 
 # install dependencies
 $ npm install
