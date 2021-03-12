@@ -29,9 +29,13 @@ export default {
   head() {
     return {
       bodyAttrs: {
-        style: this.isActive && this.scrollbarWidth
-          ? 'padding-right: ' + this.scrollbarWidth + 'px;' + ' overflow:hidden'
-          : '',
+        style:
+          this.isActive && this.scrollbarWidth
+            ? 'padding-right: ' +
+              this.scrollbarWidth +
+              'px;' +
+              ' overflow:hidden'
+            : '',
       },
     }
   },

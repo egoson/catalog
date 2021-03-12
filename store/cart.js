@@ -11,6 +11,7 @@ export const mutationTypes = {
   failureOrder: '[Cart] Failure order',
   toggleCart: '[Cart] Toggle cart',
   addProduct: '[Cart] Add product',
+  deleteProduct: '[Cart] Delete product',
   addProductToCart: '[Cart] Add product',
   removeProduct: '[Cart] Remove product',
   setCustomerName: '[Cart] Set customer name',
@@ -23,6 +24,7 @@ export const actionTypes = {
   sendOrder: '[Cart] Send order',
   selectFromLocalStorage: '[Cart] Select from local storage',
   removeProduct: '[Cart] Remove product',
+  deleteProduct: '[Cart] Delete product',
   addProduct: '[Cart] Add product',
 }
 
@@ -68,11 +70,18 @@ export const mutations = {
     state.products.push(inputProduct)
   },
   [mutationTypes.removeProduct](state, inputProduct) {
-    let lastIndex = state.products.map( item => {
-      return item.id
-    }).lastIndexOf(inputProduct.id)
+    let lastIndex = state.products
+      .map((item) => {
+        return item.id
+      })
+      .lastIndexOf(inputProduct.id)
 
     state.products.splice(lastIndex, 1)
+  },
+  [mutationTypes.deleteProduct](state, inputProduct) {
+    state.products = state.products.filter(
+      (product) => product.id !== inputProduct.id
+    )
   },
   [mutationTypes.clearCart](state) {
     state.products = []
@@ -111,6 +120,10 @@ export const actions = {
     vuexContext.commit(mutationTypes.removeProduct, product)
     setItem('productList', vuexContext.state.products)
   },
+  [actionTypes.deleteProduct](vuexContext, product) {
+    vuexContext.commit(mutationTypes.deleteProduct, product)
+    setItem('productList', vuexContext.state.products)
+  },
   [actionTypes.addProduct](vuexContext, product) {
     vuexContext.commit(mutationTypes.addProduct, product)
     setItem('productList', vuexContext.state.products)
@@ -122,36 +135,46 @@ export const getters = {
     return state.isActive
   },
   selectedProducts(state) {
-    let sortedBySameProducts = state.products.reduce((sum, product, index, array) => {
-      
-      let totalSameProducts = array.filter( item => {
-        return item.id === product.id
-      })
+    let sortedBySameProducts = state.products.reduce(
+      (sortedBySameProducts, product, index, array) => {
+        let totalSameProducts = array.filter((item) => {
+          return item.id === product.id
+        })
 
-      let sameProductIndex = sum.findIndex((item) => {
-       return item.id === product.id
-      })
+        let sameProductIndex = sortedBySameProducts.findIndex((item) => {
+          return item.id === product.id
+        })
 
-      if (sameProductIndex !== -1) {
-        sum[sameProductIndex] = {...product, count: totalSameProducts.length }
-      } else {
-        sum.push(product = {...product, count: totalSameProducts.length })
-      }
+        if (sameProductIndex !== -1) {
+          sortedBySameProducts[sameProductIndex] = {
+            ...product,
+            count: totalSameProducts.length,
+          }
+        } else {
+          sortedBySameProducts.push(
+            (product = {...product, count: totalSameProducts.length})
+          )
+        }
 
-      return sum
-    }, [])
+        return sortedBySameProducts
+      },
+      []
+    )
 
-    sortedBySameProducts.sort((a,b) => a.title > b.title)
-    
+    sortedBySameProducts.sort((a, b) => a.title > b.title)
+
     return sortedBySameProducts
-
   },
   selectedCount(state) {
     return state.products.length
   },
   totalPrice(state) {
     return state.products.reduce((sum, product, index, array) => {
-      return array.length - 1 == index ? product.regular_price.currency + ' ' + (sum + product.regular_price.value) : sum + product.regular_price.value
+      return array.length - 1 == index
+        ? product.regular_price.currency +
+            ' ' +
+            (sum + product.regular_price.value).toFixed(2)
+        : sum + product.regular_price.value
     }, 0)
   },
 }

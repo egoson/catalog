@@ -13,23 +13,29 @@
     <div :class="$style.productInner">
       <div :class="$style.titleBlock">
         <h1 :class="$style.title">{{ product.title }}</h1>
-        <span :class="$style.price"> {{ product.regular_price.currency }} {{ product.regular_price.value }}</span>
+        <span :class="$style.price">
+          {{ product.regular_price.currency }}
+          {{ product.regular_price.value }}</span
+        >
       </div>
     </div>
-    {{product.count}}
-    
-    <span
+    <ProductBtn
+      v-if="!isCart"
       :class="$style.btn"
       @click="addProductItem(product)"
-    >+</span>
-    <ProductBtn
-      :class="$style.btn"
-      @click="
-        isCart
-          ? removeProductItem(product)
-          : addProductItem(product)
-      "
     />
+    <template v-else>
+      <div :class="$style.btnWwrap">
+        <div :class="$style.counter">{{ product.count }}шт</div>
+        <span :class="$style.counterControl" @click="addProductItem(product)"
+          >+</span
+        >
+        <span :class="$style.counterControl" @click="removeProductItem(product)"
+          >-</span
+        >
+        <ProductBtn :class="$style.btn" @click="deleteProductItem(product)" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -42,7 +48,6 @@ export default {
   name: 'ProductItem',
   components: {
     ProductBtn,
-    
   },
   inject: ['isCart'],
   data() {
@@ -67,14 +72,18 @@ export default {
     ...mapActions({
       removeProduct: 'cart/' + actionTypes.removeProduct,
       addProduct: 'cart/' + actionTypes.addProduct,
+      deleteProduct: 'cart/' + actionTypes.deleteProduct,
     }),
     addProductItem(product) {
       this.addProduct(product)
     },
     removeProductItem(product) {
+      this.removeProduct(product)
+    },
+    deleteProductItem(product) {
       this.hideAnimation = true
       setTimeout(() => {
-        this.removeProduct(product)
+        this.deleteProduct(product)
         this.hideAnimation = false
       }, 350)
     },
@@ -104,12 +113,40 @@ export default {
 
   .btn {
     margin: auto 0 auto auto;
+    text-align: right;
   }
 
+  .counter,
+  .counterControl,
   .price {
     @include app-text(var(--black), 14px);
     font-weight: bold;
     line-height: 18px;
+    outline: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .counter {
+    margin-bottom: 15px;
+    text-align: right;
+  }
+
+  .counterControl {
+    font-size: 20px;
+    cursor: pointer;
+    @include app-block(4px 6px);
+    text-align: center;
+    box-shadow: -4px 0px 16px rgba(0, 0, 0, 0);
+    border: 1px solid var(--grey-light);
+    transition: 0.25s;
+    margin-bottom: 15px;
+    display: inline-block;
+
+    &:hover {
+      background-color: var(--grey-extra-light);
+    }
   }
 
   .rating {
@@ -118,15 +155,18 @@ export default {
 
   .productInner {
     display: flex;
-    flex-direction: column;
+  }
+
+  .btnWwrap {
+    margin-left: auto;
   }
 }
 
-// .removingItem {
-//   transition: 0.35s;
-//   position: relative;
-//   right: -200%;
-// }
+.removingItem {
+  transition: 0.35s;
+  position: relative;
+  right: -200%;
+}
 
 @media (min-width: 781px) {
   .product {
