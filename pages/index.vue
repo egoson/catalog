@@ -48,10 +48,6 @@ export default {
   margin-bottom: 24px;
 }
 
-.productList {
-  width: 100%;
-}
-
 .listWrap {
   display: block;
 

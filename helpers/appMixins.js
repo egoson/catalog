@@ -12,7 +12,9 @@ export const maskPhone = {
           if (!e.isTrusted) {
             return
           }
-
+          if (this.value.length === 18) {
+            return
+          }
           const x = this.value
             .replace(/\D/g, '')
             .match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/)

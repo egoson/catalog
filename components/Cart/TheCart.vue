@@ -17,7 +17,7 @@
           :successOrder="successOrder"
         />
         <ProductList
-          v-if="selectedProducts.length > 0"
+          v-if="true"
           :isCart="true"
           :class="$style.cartProductList"
           :productItems="selectedProducts"
@@ -35,7 +35,6 @@
                 required
                 :class="$style.cartInput"
                 type="text"
-                autocomplete="name"
                 placeholder="Ваше имя"
                 :value="name"
                 @change.native="name = $event.target.value"
@@ -45,10 +44,9 @@
                 :class="$style.cartInput"
                 v-phone
                 type="tel"
-                autocomplete="tel"
                 placeholder="Телефон"
                 :value="phone"
-                @change.native="phone = $event.target.value"
+                @input.native="phone = $event.target.value"
               />
               <AppInput
                 required
@@ -60,7 +58,7 @@
               />
             </template>
             <span v-if="totalPrice" :class="$style.totalPrice"
-              >К оплате: ₽{{ totalPrice }}</span
+              >К оплате: {{ totalPrice }}</span
             >
             <AppButton
               :class="$style.cartBtn"
@@ -110,7 +108,7 @@ export default {
       sendOrderAction: 'cart/' + actionTypes.sendOrder,
     }),
     sendOrder() {
-      if (this.phone.length === 18) {
+      if (this.phone && this.phone.length === 18) {
         this.sendOrderAction()
       } else {
         this.setErrorMessage('Номер введен неверно')
@@ -143,7 +141,7 @@ export default {
         return this.customer.phone
       },
       set: function (newValue) {
-        this.setCustomerPhone(newValue)
+        if (newValue.length <= 18) this.setCustomerPhone(newValue)
       },
     },
     adress: {
@@ -169,6 +167,11 @@ export default {
   will-change: auto;
   max-width: 460px;
   z-index: 2;
+
+  .cartProductList {
+  margin-bottom: 32px;
+  padding-bottom: 264px;
+}
 }
 
 .inputsWrap {
@@ -234,11 +237,6 @@ export default {
   &::-webkit-scrollbar {
     width: 0;
   }
-}
-
-.cartProductList {
-  margin-bottom: 32px;
-  padding-bottom: 264px;
 }
 
 .transitionBackground {

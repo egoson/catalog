@@ -7,23 +7,26 @@
   >
     <img
       :class="$style.photo"
-      :src="'https://frontend-test.idaproject.com' + product.photo"
+      :src="require('~/assets' + product.image)"
       :alt="product.name"
     />
     <div :class="$style.productInner">
       <div :class="$style.titleBlock">
-        <h1 :class="$style.title">{{ product.name }}</h1>
-        <span :class="$style.price">{{ product.price }} ₽</span>
+        <h1 :class="$style.title">{{ product.title }}</h1>
+        <span :class="$style.price"> {{ product.regular_price.currency }} {{ product.regular_price.value }}</span>
       </div>
-      <ProductRaiting :class="$style.rating">{{
-        product.rating
-      }}</ProductRaiting>
     </div>
+    {{product.count}}
+    
+    <span
+      :class="$style.btn"
+      @click="addProductItem(product)"
+    >+</span>
     <ProductBtn
       :class="$style.btn"
       @click="
         isCart
-          ? removeProductItem(productIndex, product)
+          ? removeProductItem(product)
           : addProductItem(product)
       "
     />
@@ -32,7 +35,6 @@
 
 <script>
 import ProductBtn from '@/components/Product/ProductBtn'
-import ProductRaiting from '@/components/Product/ProductRaiting'
 import {actionTypes} from '@/store/cart'
 import {mapGetters, mapActions} from 'vuex'
 
@@ -40,7 +42,7 @@ export default {
   name: 'ProductItem',
   components: {
     ProductBtn,
-    ProductRaiting,
+    
   },
   inject: ['isCart'],
   data() {
@@ -69,10 +71,10 @@ export default {
     addProductItem(product) {
       this.addProduct(product)
     },
-    removeProductItem(productIndex) {
+    removeProductItem(product) {
       this.hideAnimation = true
       setTimeout(() => {
-        this.removeProduct(productIndex)
+        this.removeProduct(product)
         this.hideAnimation = false
       }, 350)
     },
@@ -120,11 +122,11 @@ export default {
   }
 }
 
-.removingItem {
-  transition: 0.35s;
-  position: relative;
-  right: -200%;
-}
+// .removingItem {
+//   transition: 0.35s;
+//   position: relative;
+//   right: -200%;
+// }
 
 @media (min-width: 781px) {
   .product {

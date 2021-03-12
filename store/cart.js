@@ -67,8 +67,12 @@ export const mutations = {
   [mutationTypes.addProduct](state, inputProduct) {
     state.products.push(inputProduct)
   },
-  [mutationTypes.removeProduct](state, index) {
-    state.products.splice(index, 1)
+  [mutationTypes.removeProduct](state, inputProduct) {
+    let lastIndex = state.products.map( item => {
+      return item.id
+    }).lastIndexOf(inputProduct.id)
+
+    state.products.splice(lastIndex, 1)
   },
   [mutationTypes.clearCart](state) {
     state.products = []
@@ -103,8 +107,8 @@ export const actions = {
       }
     }
   },
-  [actionTypes.removeProduct](vuexContext, productIndex) {
-    vuexContext.commit(mutationTypes.removeProduct, productIndex)
+  [actionTypes.removeProduct](vuexContext, product) {
+    vuexContext.commit(mutationTypes.removeProduct, product)
     setItem('productList', vuexContext.state.products)
   },
   [actionTypes.addProduct](vuexContext, product) {
@@ -118,12 +122,36 @@ export const getters = {
     return state.isActive
   },
   selectedProducts(state) {
-    return state.products
+    let sortedBySameProducts = state.products.reduce((sum, product, index, array) => {
+      
+      let totalSameProducts = array.filter( item => {
+        return item.id === product.id
+      })
+
+      let sameProductIndex = sum.findIndex((item) => {
+       return item.id === product.id
+      })
+
+      if (sameProductIndex !== -1) {
+        sum[sameProductIndex] = {...product, count: totalSameProducts.length }
+      } else {
+        sum.push(product = {...product, count: totalSameProducts.length })
+      }
+
+      return sum
+    }, [])
+
+    sortedBySameProducts.sort((a,b) => a.title > b.title)
+    
+    return sortedBySameProducts
+
   },
   selectedCount(state) {
     return state.products.length
   },
   totalPrice(state) {
-    return state.products.reduce((sum, product) => sum + product.price, 0)
+    return state.products.reduce((sum, product, index, array) => {
+      return array.length - 1 == index ? product.regular_price.currency + ' ' + (sum + product.regular_price.value) : sum + product.regular_price.value
+    }, 0)
   },
 }
