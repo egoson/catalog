@@ -40,7 +40,6 @@ export default {
   display: grid;
   grid-gap: 16px;
   grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
-  padding: 0 20px;
 }
 
 .productItem {
