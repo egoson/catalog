@@ -2,9 +2,7 @@
   <nav :class="$style.nav">
     <ul :class="$style.navList">
       <li :class="$style.navItem">
-        <nuxt-link :class="$style.logoLink" to="/">
-          <img src="@/assets/images/logoastrio.png" alt="logo" />
-        </nuxt-link>
+        <nuxt-link :class="$style.logoLink" to="/"> Магазин </nuxt-link>
       </li>
       <li :class="$style.navItem" @click="toggleCart" v-show="!isActive">
         <div :class="{[$style.headerSvgWrap]: isShake}">
@@ -93,6 +91,7 @@ export default {
   font-weight: 700;
   line-height: 28px;
   color: var(--grey);
+  text-decoration: unset;
 }
 
 .navItem {
